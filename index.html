@@ -9,13 +9,16 @@
 <body>
   <header>
     <h1>Taller de Compiladores</h1>
-    <p>Simulación de diagramas de estado: identificadores, números, espacios en blanco y operadores relacionales</p>
+    <p>Simulación interactiva de análisis léxico</p>
   </header>
 
   <main>
     <section>
-      <h2>Resultados del análisis léxico</h2>
-      <img src="estatico/Resultados_Ejecucion_Taller.png" alt="Resultados análisis léxico" />
+      <h2>Probar entrada</h2>
+      <label for="entrada">Ingrese una cadena:</label>
+      <input type="text" id="entrada" placeholder="Escribe aquí..." />
+      <button onclick="analizar()">Analizar</button>
+      <div id="resultado"></div>
     </section>
 
     <section>
@@ -31,5 +34,27 @@
   <footer>
     <p>&copy; 2024 Taller de Compiladores</p>
   </footer>
+
+  <script>
+    function analizar() {
+      const entrada = document.getElementById("entrada").value;
+      const resultado = document.getElementById("resultado");
+      let res = "";
+
+      if (/^[a-zA-Z][a-zA-Z0-9]*$/.test(entrada)) {
+        res = "Identificador válido";
+      } else if (/^\d+(\.\d+)?([eE][+-]?\d+)?$/.test(entrada)) {
+        res = "Número sin signo válido";
+      } else if (/^\s+$/.test(entrada)) {
+        res = "Espacio en blanco";
+      } else if (["<", "<=", "<>", "=", ">", ">="].includes(entrada)) {
+        res = "Operador relacional válido";
+      } else {
+        res = "No reconocido";
+      }
+
+      resultado.innerText = res;
+    }
+  </script>
 </body>
 </html>
