@@ -1,60 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Taller de Compiladores</title>
-  <link rel="stylesheet" href="estatico/estilos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador Léxico Web</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Taller de Compiladores</h1>
-    <p>Simulación interactiva de análisis léxico</p>
-  </header>
+    <div class="container">
+        <h1>Analizador Léxico Web</h1>
+        
+        <div class="lexer-selector">
+            <select id="lexerType">
+                <option value="relacional">Operadores Relacionales</option>
+                <option value="identificador">Identificadores/Palabras Clave</option>
+                <option value="numeros">Números Sin Signo</option>
+            </select>
+        </div>
+        
+        <div class="input-section">
+            <input type="text" id="inputText" placeholder="Ingrese el texto a analizar...">
+            <button id="analyzeBtn">Analizar</button>
+        </div>
+        
+        <div class="result-section">
+            <h2>Resultado:</h2>
+            <div id="resultContainer"></div>
+        </div>
+        
+        <div class="examples">
+            <h3>Ejemplos:</h3>
+            <div id="examplesContainer"></div>
+        </div>
+    </div>
 
-  <main>
-    <section>
-      <h2>Probar entrada</h2>
-      <label for="entrada">Ingrese una cadena:</label>
-      <input type="text" id="entrada" placeholder="Escribe aquí..." />
-      <button onclick="analizar()">Analizar</button>
-      <div id="resultado"></div>
-    </section>
-
-    <section>
-      <h2>Integrantes</h2>
-      <ul>
-        <li>Nombre 1</li>
-        <li>Nombre 2</li>
-        <li>Nombre 3</li>
-      </ul>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2024 Taller de Compiladores</p>
-  </footer>
-
-  <script>
-    function analizar() {
-      const entrada = document.getElementById("entrada").value;
-      const resultado = document.getElementById("resultado");
-      let res = "";
-
-      if (/^[a-zA-Z][a-zA-Z0-9]*$/.test(entrada)) {
-        res = "Identificador válido";
-      } else if (/^\d+(\.\d+)?([eE][+-]?\d+)?$/.test(entrada)) {
-        res = "Número sin signo válido";
-      } else if (/^\s+$/.test(entrada)) {
-        res = "Espacio en blanco";
-      } else if (["<", "<=", "<>", "=", ">", ">="].includes(entrada)) {
-        res = "Operador relacional válido";
-      } else {
-        res = "No reconocido";
-      }
-
-      resultado.innerText = res;
-    }
-  </script>
+    <script src="lexers/relacional.js"></script>
+    <script src="lexers/identificador.js"></script>
+    <script src="lexers/numeros.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
