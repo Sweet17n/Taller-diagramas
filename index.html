@@ -12,9 +12,10 @@
         
         <div class="lexer-selector">
             <select id="lexerType">
-                <option value="relacional">Operadores relacionales</option>
-                <option value="identificador">Identificadores/palabras clave</option>
-                <option value="numeros">Números sin signo</option>
+                <option value="auto">Auto detectar</option>
+                <option value="relacional">Solo operadores relacionales</option>
+                <option value="identificador">Solo identificadores/palabras clave</option>
+                <option value="numeros">Solo números sin signo</option>
             </select>
         </div>
         
@@ -30,13 +31,48 @@
         
         <div class="examples">
             <h3>Ejemplos:</h3>
-            <div id="examplesContainer"></div>
+            <div id="examplesContainer">
+                <code>x</code>, <code>if</code>, <code>123</code>, <code>3.14</code>, <code>2e10</code>, <code>>=</code>, <code>!=</code>, <code>==</code>, <code>var123</code>, <code>!</code>
+            </div>
         </div>
     </div>
 
-    <script src="lexers/relacional.js"></script>
-    <script src="lexers/identificador.js"></script>
-    <script src="lexers/numeros.js"></script>
-    <script src="main.js"></script>
+    <!-- el archivo unificado -->
+    <script src="js/analizador_unificado.js"></script>
+
+    <script>
+        document.getElementById("analyzeBtn").addEventListener("click", () => {
+            const input = document.getElementById("inputText").value.trim();
+            const tipo = document.getElementById("lexerType").value;
+            const result = document.getElementById("resultContainer");
+
+            if (input === "") {
+                result.innerText = "Por favor, ingresa algún texto.";
+                return;
+            }
+
+            try {
+                let salida;
+                if (tipo === "relacional") {
+                    salida = analizarRelacional(input);
+                    result.innerText = `Operador relacional: ${salida.attribute}`;
+                } else if (tipo === "identificador") {
+                    const r = analizarIdentificador(input);
+                    salida = (r.type === "PALABRA_CLAVE") ?
+                        `Palabra clave: ${r.attribute}` :
+                        `Identificador: ${r.attribute}`;
+                    result.innerText = salida;
+                } else if (tipo === "numeros") {
+                    const r = analizarNumero(input);
+                    result.innerText = `Número sin signo: ${r.attribute}`;
+                } else {
+                    // Auto detectar
+                    result.innerText = analizarInput(input);
+                }
+            } catch (err) {
+                result.innerText = `Error: ${err.message}`;
+            }
+        });
+    </script>
 </body>
 </html>
