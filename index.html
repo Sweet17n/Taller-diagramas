@@ -11,65 +11,31 @@
         <h1>Analizador Léxico Automático</h1>
         
         <div class="input-section">
-            <input type="text" id="inputText" placeholder="Ejemplo: 123 >= hola!">
+            <input type="text" id="inputText" placeholder="Ejemplo: x >= 123!" autofocus>
             <button id="analyzeBtn">Analizar</button>
         </div>
         
         <div class="result-section">
             <h2>Resultado:</h2>
-            <div id="resultContainer"></div>
+            <div id="resultContainer">
+                <p class="info">Ingrese texto para analizar</p>
+            </div>
         </div>
         
         <div class="examples">
             <h3>Ejemplos:</h3>
             <div id="examplesContainer">
                 <span class="example">x</span>
-                <span class="example">if</span>
                 <span class="example">123</span>
-                <span class="example">3.14</span>
-                <span class="example">2e10</span>
                 <span class="example">>=</span>
-                <span class="example">!=</span>
-                <span class="example">==</span>
-                <span class="example">var123</span>
-                <span class="example">!</span>
+                <span class="example">var1</span>
+                <span class="example">3.14</span>
+                <span class="example">if</span>
+                <span class="example">x = 5</span>
             </div>
         </div>
     </div>
 
-    <script src="js/analizador_unificado.js"></script>
-
-    <script>
-        document.getElementById("analyzeBtn").addEventListener("click", function() {
-            const input = document.getElementById("inputText").value.trim();
-            const result = document.getElementById("resultContainer");
-
-            if (!input) {
-                result.innerHTML = '<p class="error">Por favor ingrese texto para analizar</p>';
-                return;
-            }
-
-            try {
-                const analisis = analizarInput(input).split('\n');
-                let html = '<div class="token"><strong>Análisis automático:</strong><ul>';
-                
-                analisis.forEach(item => {
-                    html += `<li>${item}</li>`;
-                });
-                
-                html += '</ul></div>';
-                result.innerHTML = html;
-            } catch (err) {
-                result.innerHTML = `<p class="error">Error: ${err.message}</p>`;
-            }
-        });
-
-        // Hacer los ejemplos clickables
-        document.querySelectorAll('.example').forEach(example => {
-            example.addEventListener('click', function() {
-                document.getElementById('inputText').value = this.textContent;
-            });
-        });
-    </script>
+    <script src="js/analizador.js"></script>
 </body>
 </html>
