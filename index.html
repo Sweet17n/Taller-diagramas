@@ -3,24 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizador léxico web</title>
+    <title>Analizador Léxico Automático</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Analizador léxico web</h1>
-        
-        <div class="lexer-selector">
-            <select id="lexerType">
-                <option value="auto">Auto detectar</option>
-                <option value="relacional">Solo operadores relacionales</option>
-                <option value="identificador">Solo identificadores/palabras clave</option>
-                <option value="numeros">Solo números sin signo</option>
-            </select>
-        </div>
+        <h1>Analizador Léxico Automático</h1>
         
         <div class="input-section">
-            <input type="text" id="inputText" placeholder="Ingrese el texto a analizar...">
+            <input type="text" id="inputText" placeholder="Ejemplo: 123 >= hola!">
             <button id="analyzeBtn">Analizar</button>
         </div>
         
@@ -32,59 +23,51 @@
         <div class="examples">
             <h3>Ejemplos:</h3>
             <div id="examplesContainer">
-                <code>x</code>, <code>if</code>, <code>123</code>, <code>3.14</code>, <code>2e10</code>, <code>>=</code>, <code>!=</code>, <code>==</code>, <code>var123</code>, <code>!</code>
+                <span class="example">x</span>
+                <span class="example">if</span>
+                <span class="example">123</span>
+                <span class="example">3.14</span>
+                <span class="example">2e10</span>
+                <span class="example">>=</span>
+                <span class="example">!=</span>
+                <span class="example">==</span>
+                <span class="example">var123</span>
+                <span class="example">!</span>
             </div>
         </div>
     </div>
 
-    <!-- el archivo unificado -->
     <script src="js/analizador_unificado.js"></script>
 
     <script>
-        document.getElementById("analyzeBtn").addEventListener("click", () => {
+        document.getElementById("analyzeBtn").addEventListener("click", function() {
             const input = document.getElementById("inputText").value.trim();
-            const tipo = document.getElementById("lexerType").value;
             const result = document.getElementById("resultContainer");
 
-            if (input === "") {
-                result.innerHTML = "<p class='error'>Por favor, ingresa algún texto.</p>";
+            if (!input) {
+                result.innerHTML = '<p class="error">Por favor ingrese texto para analizar</p>';
                 return;
             }
 
             try {
-                let salida;
-                if (tipo === "relacional") {
-                    salida = analizarRelacional(input);
-                    result.innerHTML = `<div class="token"><strong>Operador relacional:</strong> ${salida.attribute}</div>`;
-                } else if (tipo === "identificador") {
-                    const r = analizarIdentificador(input);
-                    salida = (r.type === "PALABRA_CLAVE") ?
-                        `<div class="token"><strong>Palabra clave:</strong> ${r.attribute}</div>` :
-                        `<div class="token"><strong>Identificador:</strong> ${r.attribute}</div>`;
-                    result.innerHTML = salida;
-                } else if (tipo === "numeros") {
-                    const r = analizarNumero(input);
-                    result.innerHTML = `<div class="token"><strong>Número sin signo:</strong> ${r.attribute}</div>`;
-                } else {
-                    // Auto detectar
-                    const analisis = analizarInput(input).split('\n');
-                    let html = '<div class="token"><strong>Análisis automático:</strong><ul>';
-                    analisis.forEach(item => {
-                        html += `<li>${item}</li>`;
-                    });
-                    html += '</ul></div>';
-                    result.innerHTML = html;
-                }
+                const analisis = analizarInput(input).split('\n');
+                let html = '<div class="token"><strong>Análisis automático:</strong><ul>';
+                
+                analisis.forEach(item => {
+                    html += `<li>${item}</li>`;
+                });
+                
+                html += '</ul></div>';
+                result.innerHTML = html;
             } catch (err) {
                 result.innerHTML = `<p class="error">Error: ${err.message}</p>`;
             }
         });
 
         // Hacer los ejemplos clickables
-        document.querySelectorAll('#examplesContainer code').forEach(code => {
-            code.style.cursor = 'pointer';
-            code.addEventListener('click', () => {
-                document.getElementById('inputText').value = code.textContent;
+        document.querySelectorAll('.example').forEach(example => {
+            example.addEventListener('click', function() {
+                document.getElementById('inputText').value = this.textContent;
             });
         });
     </script>
