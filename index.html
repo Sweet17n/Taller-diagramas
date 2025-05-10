@@ -47,7 +47,7 @@
             const result = document.getElementById("resultContainer");
 
             if (input === "") {
-                result.innerText = "Por favor, ingresa algún texto.";
+                result.innerHTML = "<p class='error'>Por favor, ingresa algún texto.</p>";
                 return;
             }
 
@@ -55,23 +55,37 @@
                 let salida;
                 if (tipo === "relacional") {
                     salida = analizarRelacional(input);
-                    result.innerText = `Operador relacional: ${salida.attribute}`;
+                    result.innerHTML = `<div class="token"><strong>Operador relacional:</strong> ${salida.attribute}</div>`;
                 } else if (tipo === "identificador") {
                     const r = analizarIdentificador(input);
                     salida = (r.type === "PALABRA_CLAVE") ?
-                        `Palabra clave: ${r.attribute}` :
-                        `Identificador: ${r.attribute}`;
-                    result.innerText = salida;
+                        `<div class="token"><strong>Palabra clave:</strong> ${r.attribute}</div>` :
+                        `<div class="token"><strong>Identificador:</strong> ${r.attribute}</div>`;
+                    result.innerHTML = salida;
                 } else if (tipo === "numeros") {
                     const r = analizarNumero(input);
-                    result.innerText = `Número sin signo: ${r.attribute}`;
+                    result.innerHTML = `<div class="token"><strong>Número sin signo:</strong> ${r.attribute}</div>`;
                 } else {
                     // Auto detectar
-                    result.innerText = analizarInput(input);
+                    const analisis = analizarInput(input).split('\n');
+                    let html = '<div class="token"><strong>Análisis automático:</strong><ul>';
+                    analisis.forEach(item => {
+                        html += `<li>${item}</li>`;
+                    });
+                    html += '</ul></div>';
+                    result.innerHTML = html;
                 }
             } catch (err) {
-                result.innerText = `Error: ${err.message}`;
+                result.innerHTML = `<p class="error">Error: ${err.message}</p>`;
             }
+        });
+
+        // Hacer los ejemplos clickables
+        document.querySelectorAll('#examplesContainer code').forEach(code => {
+            code.style.cursor = 'pointer';
+            code.addEventListener('click', () => {
+                document.getElementById('inputText').value = code.textContent;
+            });
         });
     </script>
 </body>
