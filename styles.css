@@ -1,64 +1,73 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    max-width: 800px;
-    margin: 0 auto;
+    background-color: #f5f7fa;
+    margin: 0;
     padding: 20px;
-    background-color: #f5f5f5;
+    color: #333;
 }
 
 .container {
+    max-width: 800px;
+    margin: 0 auto;
     background: white;
     padding: 25px;
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2, h3 {
+h1 {
     color: #2c3e50;
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-.lexer-selector, .input-section {
+.input-section {
+    display: flex;
+    gap: 10px;
     margin-bottom: 20px;
 }
 
-select, input {
-    padding: 10px;
+#inputText {
+    flex: 1;
+    padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 100%;
-    max-width: 400px;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
-button {
+#analyzeBtn {
     background-color: #3498db;
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
+    padding: 12px 20px;
+    border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
-button:hover {
+#analyzeBtn:hover {
     background-color: #2980b9;
 }
 
-.result-section, .examples {
+.result-section {
     margin-top: 30px;
+}
+
+#resultContainer {
+    min-height: 100px;
     padding: 15px;
     background-color: #f9f9f9;
-    border-radius: 4px;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .token {
-    display: inline-block;
-    margin: 5px;
-    padding: 5px 10px;
     background-color: #e8f4fc;
-    border-radius: 3px;
-    border-left: 3px solid #3498db;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 4px solid #3498db;
 }
 
 .error {
@@ -66,12 +75,30 @@ button:hover {
     font-weight: bold;
 }
 
+.info {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+.examples {
+    margin-top: 30px;
+}
+
+#examplesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
 .example {
+    background-color: #e8f4fc;
+    padding: 5px 10px;
+    border-radius: 4px;
     cursor: pointer;
-    color: #3498db;
-    margin-right: 10px;
+    transition: background-color 0.2s;
 }
 
 .example:hover {
-    text-decoration: underline;
+    background-color: #d6e7f7;
 }
