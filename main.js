@@ -1,77 +1,79 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const lexerType = document.getElementById('lexerType');
     const inputText = document.getElementById('inputText');
     const analyzeBtn = document.getElementById('analyzeBtn');
     const resultContainer = document.getElementById('resultContainer');
-    const examplesContainer = document.getElementById('examplesContainer');
-    
-    // Ejemplos para cada tipo de analizador
-    const examples = {
-        relacional: ['<', '<=', '>', '>=', '==', '!=', '<>'],
-        identificador: ['variable1', 'if', 'while', '123invalido', '_temp'],
-        numeros: ['123', '45.67', '1.2E3', '5E-2', '3.14', '1.2.3', 'E45']
-    };
-    
-    // Actualizar ejemplos cuando cambia el tipo de analizador
-    lexerType.addEventListener('change', updateExamples);
-    
-    // Manejar clic en el botón de análisis
-    analyzeBtn.addEventListener('click', analyzeInput);
-    
-    // Manejar clic en los ejemplos
-    examplesContainer.addEventListener('click', function(e) {
-        if (e.target.classList.contains('example')) {
-            inputText.value = e.target.textContent;
-            analyzeInput();
-        }
-    });
-    
-    function analyzeInput() {
+
+    analyzeBtn.addEventListener('click', function() {
         const text = inputText.value.trim();
-        const type = lexerType.value;
-        
         resultContainer.innerHTML = '';
-        
+
         if (!text) {
-            resultContainer.innerHTML = '<p class="error">Por favor ingrese texto para analizar</p>';
+            resultContainer.innerHTML = '<p class="error">Ingrese texto</p>';
             return;
         }
+
+        // Analizar TODAS las categorías
+        const resultados = {
+            espacios: tieneEspacios(text),
+            relacional: esOperadorRelacional(text),
+            identificador: esIdentificador(text),
+            numero: esNumero(text),
+            signos: tieneSignos(text)
+        };
+
+        // Mostrar resultados combinados
+        let html = '<div class="token"><strong>Análisis:</strong><ul>';
         
-        try {
-            let token;
-            
-            switch(type) {
-                case 'relacional':
-                    token = analizarRelacional(text);
-                    break;
-                case 'identificador':
-                    token = analizarIdentificador(text);
-                    break;
-                case 'numeros':
-                    token = analizarNumero(text);
-                    break;
+        for (const [categoria, valido] of Object.entries(resultados)) {
+            if (valido) {
+                if (categoria === 'espacios') {
+                    html += `<li>✅ Contiene <strong>espacios en blanco</strong></li>`;
+                } else if (categoria === 'signos') {
+                    html += `<li>✅ Contiene <strong>signos adicionales</strong></li>`;
+                } else {
+                    html += `<li>✅ Es un <strong>${categoria}</strong> válido</li>`;
+                }
             }
-            
-            if (token) {
-                const tokenHTML = `
-                    <div class="token">
-                        <strong>Tipo:</strong> ${token.type}<br>
-                        <strong>Atributo:</strong> ${token.attribute || 'N/A'}
-                    </div>
-                `;
-                resultContainer.innerHTML = tokenHTML;
-            }
-        } catch (error) {
-            resultContainer.innerHTML = `<p class="error">Error: ${error.message}</p>`;
         }
-    }
-    
-    function updateExamples() {
-        const type = lexerType.value;
-        examplesContainer.innerHTML = examples[type]
-            .map(ex => `<span class="example">${ex}</span>`)
-            .join('');
-    }
-    
-    updateExamples();
+
+        html += '</ul></div>';
+        resultContainer.innerHTML = html;
+    });
 });
+
+// Funciones de análisis (adaptadas):
+function esOperadorRelacional(input) {
+    try {
+        analizarRelacional(input);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+function esIdentificador(input) {
+    try {
+        analizarIdentificador(input);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+function esNumero(input) {
+    try {
+        analizarNumero(input);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+function tieneEspacios(input) {
+    return input.includes(' ');
+}
+
+function tieneSignos(input) {
+    const signos = /[!@#$%^&*(),.?":{}|<>]/;
+    return signos.test(input);
+}
